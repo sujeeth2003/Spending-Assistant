@@ -49,3 +49,32 @@ plt.xlabel("Month")
 plt.xticks(rotation=45)
 plt.show()
 
+# ===== Step 7: Use Groq LLM for insights =====
+client = Groq()
+
+# Prepare a summary text for the LLM
+summary_text = df.groupby("Category")['Amount'].sum().to_dict()
+summary_text_str = "\n".join([f"{cat}: ${amt:.2f}" for cat, amt in summary_text.items()])
+
+# Example query
+query = "Which category did I spend the most on and how can I reduce it and compare the price of a specific item and recommend cheaper place to buy make it short like within 4 lines and if its necessary suggest which else can be reduced?"
+
+completion = client.chat.completions.create(
+    model="llama-3.1-8b-instant",
+    messages=[
+      {
+        "role": "user",
+        "content": f"My spending summary:\n{summary_text_str}\n\nQuestion: {query}"
+      }
+    ],
+    temperature=0.7,
+    max_completion_tokens=512,
+    top_p=1,
+    stream=True,
+    stop=None
+)
+
+# Stream the AI's response
+print("AI Insight:")
+for chunk in completion:
+    print(chunk.choices[0].delta.content or "", end="")
