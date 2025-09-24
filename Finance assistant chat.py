@@ -28,7 +28,7 @@ categories = {
     "Entertainment": ["netflix", "spotify", "movie", "cinema", "amc"],
     "Shopping": ["amazon", "mall", "clothes", "nike", "adidas"],
     "Bills": ["electric", "water", "internet", "phone", "rent"],
-    "Coffee": []
+    "Cofe": []
 }
 
 def categorize(row):
