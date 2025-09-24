@@ -30,3 +30,22 @@ categories = {
     "Coffee": []
 }
 
+def categorize(row):
+    text = f"{row['Merchant']} {row.get('Description','')}".lower()
+    for cat, keywords in categories.items():
+        for kw in keywords:
+            if kw in text:
+                return cat
+    return "Other"
+
+df['Category'] = df.apply(categorize, axis=1)
+
+# ===== Step 6: Plot monthly spending chart =====
+monthly = df.groupby([df['Date'].dt.to_period('M'), 'Category'])['Amount'].sum().unstack(fill_value=0)
+monthly.plot(kind='bar', stacked=True, figsize=(12,6))
+plt.title("Monthly Spending by Category")
+plt.ylabel("Amount ($)")
+plt.xlabel("Month")
+plt.xticks(rotation=45)
+plt.show()
+
