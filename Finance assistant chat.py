@@ -5,6 +5,7 @@
 import os
 from dotenv import load_dotenv
 #from google.colab import userdata
+#os.environ["GROQ_API_KEY"] = userdata.get("GROQ_API_KEY")
 load_dotenv()
 Key = os.getenv("GROQ_API_KEY")
 
