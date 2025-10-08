@@ -38,3 +38,20 @@ async def finance_insights(
 My spending summary:
 {summary_text}
 
+Question:
+{question}
+
+Answer in max 4 short lines. Give actionable advice.
+"""
+            }
+        ],
+        temperature=0.7,
+        max_completion_tokens=300,
+    )
+
+    answer = completion.choices[0].message.content
+
+    return {
+        "summary": summary,
+        "answer": answer
+    }
