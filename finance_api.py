@@ -31,3 +31,17 @@ async def finance_insights(
         "Bills": ["rent", "electric"],
     }
 
+    def categorize(row):
+        text = str(row.get("Merchant", "")).lower()
+        for cat, keys in categories.items():
+            if any(k in text for k in keys):
+                return cat
+        return "Other"
+
+    df["Category"] = df.apply(categorize, axis=1)
+    summary = df.groupby("Category")["Amount"].sum().to_dict()
+
+    summary_text = "\n".join(
+        f"{k}: ${v:.2f}" for k, v in summary.items()
+    )
+
