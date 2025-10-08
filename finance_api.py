@@ -45,3 +45,18 @@ async def finance_insights(
         f"{k}: ${v:.2f}" for k, v in summary.items()
     )
 
+    response = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[
+            {
+                "role": "user",
+                "content": f"My spending:\n{summary_text}\n\n{question}"
+            }
+        ],
+        max_completion_tokens=150,
+    )
+
+    return {
+        "summary": summary,
+        "answer": response.choices[0].message.content
+    }
