@@ -20,3 +20,21 @@ app.add_middleware(
 )
 
 @app.post("/finance/insights")
+async def finance_insights(
+    file: UploadFile,
+    question: str = Form(...)
+):
+    content = await file.read()
+    _, summary = preprocess_csv(StringIO(content.decode()))
+
+    summary_text = "\n".join([f"{k}: ${v:.2f}" for k, v in summary.items()])
+
+    completion = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[
+            {
+                "role": "user",
+                "content": f"""
+My spending summary:
+{summary_text}
+
