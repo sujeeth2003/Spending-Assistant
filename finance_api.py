@@ -15,12 +15,12 @@ app.add_middleware(
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-@app.post("/finance/insights")
-async def finance_insights(
-    file: UploadFile,
-    question: str = Form(...)
-):
-    df = pd.read_csv(file.file)
+class ExpenseRequest(BaseModel):
+    expenses: list
+    question: str
+
+@app.post("/finance/manual-insights")
+async def manual_insights(data: ExpenseRequest):
 
     categories = {
         "Food": ["restaurant", "cafe", "coffee", "pizza","eating out"],
