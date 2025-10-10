@@ -29,12 +29,7 @@ async def manual_insights(data: ExpenseRequest):
         "Groceries": ["walmart", "grocery"]
     }
 
-    def categorize(row):
-        text = str(row.get("Merchant", "")).lower()
-        for cat, keys in categories.items():
-            if any(k in text for k in keys):
-                return cat
-        return "Other"
+    summary = {}
 
     df["Category"] = df.apply(categorize, axis=1)
     summary = df.groupby("Category")["Amount"].sum().to_dict()
