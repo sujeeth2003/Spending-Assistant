@@ -23,12 +23,10 @@ class ExpenseRequest(BaseModel):
 async def manual_insights(data: ExpenseRequest):
 
     categories = {
-        "Food": ["restaurant", "cafe", "coffee", "pizza","eating out"],
-        "Groceries": ["walmart", "grocery","food"],
-        "Transport": ["uber", "fuel","transport"],
-        "Entertainment": ["netflix", "spotify","entertainment"],
-        "Bills": ["electric","Bills"],
-        "Rent": ["House"],
+        "Food": ["restaurant", "cafe", "coffee"],
+        "Transport": ["uber", "fuel"],
+        "Entertainment": ["netflix", "spotify"],
+        "Groceries": ["walmart", "grocery"]
     }
 
     def categorize(row):
