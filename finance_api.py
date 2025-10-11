@@ -31,8 +31,16 @@ async def manual_insights(data: ExpenseRequest):
 
     summary = {}
 
-    df["Category"] = df.apply(categorize, axis=1)
-    summary = df.groupby("Category")["Amount"].sum().to_dict()
+    for e in data.expenses:
+        merchant = e["merchant"].lower()
+        amount = e["amount"]
+
+        category = "Other"
+        for k, v in categories.items():
+            if any(word in merchant for word in v):
+                category = k
+
+        summary[category] = summary.get(category, 0) + amount
 
     summary_text = "\n".join(
         f"{k}: ${v:.2f}" for k, v in summary.items()
