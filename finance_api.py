@@ -17,8 +17,13 @@ app.add_middleware(
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-class ExpenseRequest(BaseModel):
-    expenses: list
+# ---------- Models ----------
+class Expense(BaseModel):
+    category: str
+    amount: float
+
+class InsightRequest(BaseModel):
+    expenses: List[Expense]
     question: str
 
 @app.post("/finance/manual-insights")
