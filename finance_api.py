@@ -26,6 +26,14 @@ class InsightRequest(BaseModel):
     expenses: List[Expense]
     question: str
 
+
+# ---------- Health Check ----------
+@app.get("/")
+def root():
+    return {"status": "Finance Assistant API running"}
+
+
+# ---------- Manual Insights ----------
 @app.post("/finance/manual-insights")
 async def manual_insights(data: ExpenseRequest):
 
