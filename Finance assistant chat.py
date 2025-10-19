@@ -5,6 +5,7 @@
 import os
 from dotenv import load_dotenv
 #from google.colab import userdata
+#os.environ["GROQ_API_KEY"] = userdata.get("GROQ_API_KEY")
 load_dotenv()
 Key = os.getenv("GROQ_API_KEY")
 
@@ -27,7 +28,7 @@ categories = {
     "Entertainment": ["netflix", "spotify", "movie", "cinema", "amc"],
     "Shopping": ["amazon", "mall", "clothes", "nike", "adidas"],
     "Bills": ["electric", "water", "internet", "phone", "rent"],
-    "Coffee": []
+    "Cofe": []
 }
 
 def categorize(row):
