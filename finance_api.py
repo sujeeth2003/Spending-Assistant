@@ -38,17 +38,8 @@ def root():
 async def manual_insights(req: InsightRequest):
     # Aggregate spending by category
     summary = {}
-
-    for e in data.expenses:
-        merchant = e["merchant"].lower()
-        amount = e["amount"]
-
-        category = "Other"
-        for k, v in categories.items():
-            if any(word in merchant for word in v):
-                category = k
-
-        summary[category] = summary.get(category, 0) + amount
+    for e in req.expenses:
+        summary[e.category] = summary.get(e.category, 0) + e.amount
 
     summary_text = "\n".join(
         f"{k}: ${v:.2f}" for k, v in summary.items()
