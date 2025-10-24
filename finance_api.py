@@ -35,15 +35,8 @@ def root():
 
 # ---------- Manual Insights ----------
 @app.post("/finance/manual-insights")
-async def manual_insights(data: ExpenseRequest):
-
-    categories = {
-        "Food": ["restaurant", "cafe", "coffee"],
-        "Transport": ["uber", "fuel"],
-        "Entertainment": ["netflix", "spotify"],
-        "Groceries": ["walmart", "grocery"]
-    }
-
+async def manual_insights(req: InsightRequest):
+    # Aggregate spending by category
     summary = {}
 
     for e in data.expenses:
