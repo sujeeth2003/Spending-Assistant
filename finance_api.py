@@ -42,7 +42,7 @@ async def manual_insights(req: InsightRequest):
         summary[e.category] = summary.get(e.category, 0) + e.amount
 
     summary_text = "\n".join(
-        f"{k}: ${v:.2f}" for k, v in summary.items()
+        f"{cat}: ${amt:.2f}" for cat, amt in summary.items()
     )
 
     response = client.chat.completions.create(
