@@ -45,6 +45,18 @@ async def manual_insights(req: InsightRequest):
         f"{cat}: ${amt:.2f}" for cat, amt in summary.items()
     )
 
+    prompt = f"""
+You are a financial assistant.
+Here is the user's spending breakdown:
+
+{summary_text}
+
+Question:
+{req.question}
+
+Give practical, concise advice.
+"""
+
     response = client.chat.completions.create(
         model="llama-3.1-8b-instant",
         messages=[{
