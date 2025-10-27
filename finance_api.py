@@ -65,5 +65,5 @@ Give practical, concise advice.
 
     return {
         "summary": summary,
-        "answer": response.choices[0].message.content
+        "answer": response.choices[0].message.content.strip()
     }
