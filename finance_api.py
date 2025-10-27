@@ -59,11 +59,8 @@ Give practical, concise advice.
 
     response = client.chat.completions.create(
         model="llama-3.1-8b-instant",
-        messages=[{
-            "role": "user",
-            "content": f"My spending:\n{summary_text}\n\n{data.question}"
-        }],
-        max_completion_tokens=150
+        messages=[{"role": "user", "content": prompt}],
+        max_completion_tokens=200,
     )
 
     return {
