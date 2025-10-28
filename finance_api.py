@@ -15,3 +15,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
+# ---------- Models ----------
+class Expense(BaseModel):
+    category: str
+    amount: float
+
