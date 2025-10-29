@@ -22,3 +22,10 @@ class Expense(BaseModel):
     category: str
     amount: float
 
+class InsightRequest(BaseModel):
+    expenses: List[Expense]
+    question: str
+
+
+# ---------- Health Check ----------
+@app.get("/")
