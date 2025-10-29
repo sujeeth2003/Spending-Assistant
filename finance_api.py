@@ -29,3 +29,9 @@ class InsightRequest(BaseModel):
 
 # ---------- Health Check ----------
 @app.get("/")
+def root():
+    return {"status": "Finance Assistant API running"}
+
+
+# ---------- Manual Insights ----------
+@app.post("/finance/manual-insights")
