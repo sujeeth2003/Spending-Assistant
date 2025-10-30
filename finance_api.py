@@ -35,3 +35,17 @@ def root():
 
 # ---------- Manual Insights ----------
 @app.post("/finance/manual-insights")
+async def manual_insights(req: InsightRequest):
+    # Aggregate spending by category
+    summary = {}
+    for e in req.expenses:
+        summary[e.category] = summary.get(e.category, 0) + e.amount
+
+    summary_text = "\n".join(
+        f"{cat}: ${amt:.2f}" for cat, amt in summary.items()
+    )
+
+    prompt = f"""
+You are a financial assistant.
+Here is the user's spending breakdown:
+
