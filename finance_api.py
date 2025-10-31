@@ -49,3 +49,21 @@ async def manual_insights(req: InsightRequest):
 You are a financial assistant.
 Here is the user's spending breakdown:
 
+{summary_text}
+
+Question:
+{req.question}
+
+Give practical, concise advice.
+"""
+
+    response = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[{"role": "user", "content": prompt}],
+        max_completion_tokens=200,
+    )
+
+    return {
+        "summary": summary,
+        "answer": response.choices[0].message.content.strip()
+    }
