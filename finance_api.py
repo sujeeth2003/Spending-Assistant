@@ -1,12 +1,11 @@
-from fastapi import FastAPI, UploadFile, Form
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import pandas as pd
+from pydantic import BaseModel
 from groq import Groq
 import os
 
 app = FastAPI()
 
-# Allow frontend access
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,31 +15,32 @@ app.add_middleware(
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-@app.post("/finance/insights")
-async def finance_insights(
-    file: UploadFile,
-    question: str = Form(...)
-):
-    df = pd.read_csv(file.file)
+class ExpenseRequest(BaseModel):
+    expenses: list
+    question: str
+
+@app.post("/finance/manual-insights")
+async def manual_insights(data: ExpenseRequest):
 
     categories = {
-        "Food": ["restaurant", "cafe", "coffee", "pizza","eating out"],
-        "Groceries": ["walmart", "grocery","food"],
-        "Transport": ["uber", "fuel","transport"],
-        "Entertainment": ["netflix", "spotify","entertainment"],
-        "Bills": ["electric","Bills"],
-        "Rent": ["House"],
+        "Food": ["restaurant", "cafe", "coffee"],
+        "Transport": ["uber", "fuel"],
+        "Entertainment": ["netflix", "spotify"],
+        "Groceries": ["walmart", "grocery"]
     }
 
-    def categorize(row):
-        text = str(row.get("Merchant", "")).lower()
-        for cat, keys in categories.items():
-            if any(k in text for k in keys):
-                return cat
-        return "Other"
+    summary = {}
 
-    df["Category"] = df.apply(categorize, axis=1)
-    summary = df.groupby("Category")["Amount"].sum().to_dict()
+    for e in data.expenses:
+        merchant = e["merchant"].lower()
+        amount = e["amount"]
+
+        category = "Other"
+        for k, v in categories.items():
+            if any(word in merchant for word in v):
+                category = k
+
+        summary[category] = summary.get(category, 0) + amount
 
     summary_text = "\n".join(
         f"{k}: ${v:.2f}" for k, v in summary.items()
@@ -48,13 +48,11 @@ async def finance_insights(
 
     response = client.chat.completions.create(
         model="llama-3.1-8b-instant",
-        messages=[
-            {
-                "role": "user",
-                "content": f"My spending:\n{summary_text}\n\n{question}"
-            }
-        ],
-        max_completion_tokens=150,
+        messages=[{
+            "role": "user",
+            "content": f"My spending:\n{summary_text}\n\n{data.question}"
+        }],
+        max_completion_tokens=150
     )
 
     return {
