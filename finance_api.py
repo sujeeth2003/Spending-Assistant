@@ -24,11 +24,12 @@ async def finance_insights(
     df = pd.read_csv(file.file)
 
     categories = {
-        "Food": ["restaurant", "cafe", "coffee", "pizza"],
-        "Groceries": ["walmart", "grocery"],
-        "Transport": ["uber", "fuel"],
-        "Entertainment": ["netflix", "spotify"],
-        "Bills": ["rent", "electric"],
+        "Food": ["restaurant", "cafe", "coffee", "pizza","eating out"],
+        "Groceries": ["walmart", "grocery","food"],
+        "Transport": ["uber", "fuel","transport"],
+        "Entertainment": ["netflix", "spotify","entertainment"],
+        "Bills": ["electric","Bills"],
+        "Rent": ["House"],
     }
 
     def categorize(row):
